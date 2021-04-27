@@ -953,9 +953,9 @@
                               str2 += '<td><a href='+data.Link_judul+'>' + data.Judul + '</a></td>';
                               str2 += '<td>' + data.Durasi + '</td>';
                               str2 += '<td>' + data.Rating + '</td>';
-                              str2 += '<td></td>';
-                              str2 += '<td></td>';
-                              str2 += '<td></td></tr>';
+                              str2 += '<td>' + data.Direktor + '</td>';
+                              str2 += '<td><img src=" '+data.Image+' " alt=" '+ data.Image + ' " class="img-thumbnail"></td>';
+                              str2 += '<td>' + data.Waktu_scrapping + '</td></tr>';
                          });
 
                          str2 += '</tbody></table>';
