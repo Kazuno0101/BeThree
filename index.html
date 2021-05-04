@@ -247,6 +247,33 @@
           <section id="chart" class="mt-3">
                <div class="container">
 
+                    <!-- //chart info -->
+                    <div class="row mt-5">
+                         <div class="col-lg-12">
+                              <div class="section-heading">
+                                   <h6>Info Chart</h6>
+                              </div>
+                         </div>
+                    </div>
+                    <div class="row">
+                         <div class="col-md-3">
+                              <span class="badge badge-success" >Total Data</span>
+                              <p id="c1"><b>  </b></p>
+                         </div>
+                         <div class="col-md-3">
+                              <span class="badge badge-danger" >Rating Terendah</span>
+                              <p id="c2"><b>  </b></p>
+                         </div>
+                         <div class="col-md-3">
+                              <span class="badge badge-info" >Rating Tertinggi</span>
+                              <p id="c3"><b> </b></p>
+                         </div>
+                         <div class="col-md-3">
+                              <span class="badge badge-warning" >Rating Rata-Rata</span>
+                              <p id="c4"><b> </b></p>
+                         </div>
+                    </div>
+
                     <!-- //chart1 -->
                     <div class="row mt-5">
                          <div class="col-lg-12">
@@ -1022,13 +1049,14 @@
                     $.get('hasilscraping.json', function (obj) {
                          var str2 = '<table>';
 
-                         str2 = '<table class="table"><thead class="thead-dark"><tr><th scope="col">Rank</th><th scope="col">Judul</th><th scope="col">Durasi</th><th scope="col">Rating</th><th scope="col">Director</th><th scope="col">Gambar</th><th scope="col">Waktu Pengambilan</th></tr></thead><tbody>';
+                         str2 = '<table class="table"><thead class="thead-dark"><tr><th scope="col">Rank</th><th scope="col">Judul</th><th scope="col">Durasi</th><th scope="col">Rating</th><th scope="col">Genre</th><th scope="col">Director</th><th scope="col">Gambar</th><th scope="col">Waktu Pengambilan</th></tr></thead><tbody>';
 
                          $.each(obj, function (n, data) {
                               str2 += '<tr><td scope=row>' + data.Rank + '</td>';
                               str2 += '<td><a href='+data.Link_judul+'>' + data.Judul + '</a></td>';
                               str2 += '<td>' + data.Durasi + '</td>';
                               str2 += '<td>' + data.Rating + '</td>';
+                              str2 += '<td>' + data.Genre + '</td>';
                               str2 += '<td>' + data.Direktor + '</td>';
                               str2 += '<td><img src=" '+data.Image+' " alt=" '+ data.Image + ' " class="img-thumbnail"></td>';
                               str2 += '<td>' + data.Waktu_scrapping + '</td></tr>';
@@ -1044,6 +1072,26 @@
           // chart
           <script type="text/javascript">
 
+          $(function () {
+               $.get('hasilscraping.json', function (obj) {
+                    var total = 0,
+                         peratingan = [],
+                         ratingRata = 0;
+
+                    $.each(obj, function (n, data) {
+                         total++;
+                         peratingan.push(data.Rating);
+                         ratingRata += peratingan.push(data.Rating);
+                    });
+
+                    ratingRata = ratingRata / 299;
+
+                    $('#c1').html(total);
+                    $('#c2').html(peratingan[0]);
+                    $('#c3').html(peratingan[299]);
+                    $('#c4').html(ratingRata.toFixed(4));
+               });
+          });
           //line
           $(function () {
                     $.get('hasilscraping.json', function (obj) {
@@ -1078,7 +1126,6 @@
                          );
                     });
                });
-
           // bar vertical
           $(function () {
                     $.get('hasilscraping.json', function (obj) {
@@ -1110,7 +1157,6 @@
                          );
                     });
                });
-
           // bar horizontal
           $(function () {
                $.get('hasilscraping.json', function (obj) {
