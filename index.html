@@ -12,6 +12,10 @@
 
           <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
+          <!-- chartist -->
+          <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" />
+          <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+
           <!-- Additional CSS Files -->
           <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css" />
 
@@ -72,6 +76,7 @@
                                         <li class="scroll-to-section"><a href="#about">About</a></li>
                                         <li class="scroll-to-section"><a href="#scraping">Scraping</a></li>
                                         <li class="scroll-to-section"><a href="#scraping2">Scraping 2</a></li>
+                                        <li class="scroll-to-section"><a href="#chart">Chart</a></li>
                                         <li class="scroll-to-section"><a href="#menu">Portofolio</a></li>
                                         <li class="scroll-to-section"><a href="#chefs">Member</a></li>
                                         <li class="scroll-to-section"><a href="#reservation">Contact Us</a></li>
@@ -236,6 +241,75 @@
                               <div id="data_scrapping2"></div>
                          </div>
                     </div>
+               </div>
+          </section>
+
+          <section id="chart" class="mt-3">
+               <div class="container">
+
+                    <!-- //chart1 -->
+                    <div class="row mt-5">
+                         <div class="col-lg-12">
+                              <div class="section-heading">
+                                   <h6>Chart Line</h6>
+                                   <p>Rating Tertinggi</p>
+                              </div>
+                         </div>
+                    </div>
+                    <div class="row">
+                         <div class="col-md-12">
+                              <div class="ct-chart ct-chart1 ct-golden-section" id="chart1"></div>
+                         </div>
+                    </div>
+
+                    <!-- chart2 -->
+                    <div class="row mt-5">
+                         <div class="col-lg-12">
+                              <div class="section-heading">
+                                   <h6>Vertical Bar</h6>
+                                   <p>Waktu Terlama</p>
+                              </div>
+                         </div>
+                    </div>
+                    <div class="row">
+                         <div class="col-md-12">
+                              <div class="ct-chart ct-chart2 ct-golden-section" id="chart1"></div>
+                         </div>
+                    </div>
+
+                    <!-- chart3 -->
+                    <div class="row mt-5">
+                         <div class="col-lg-12">
+                              <div class="section-heading">
+                                   <h6>Horizontal Bar</h6>
+                                   <p>Film Paling Disukai</p>
+                              </div>
+                         </div>
+                    </div>
+                    <div class="row">
+                         <div class="col-md-12">
+                              <div class="ct-chart ct-chart3 ct-golden-section" id="chart1"></div>
+                         </div>
+                    </div>
+
+                    <!-- chart4 -->
+                    <div class="row mt-5">
+                         <div class="col-lg-12">
+                              <div class="section-heading">
+                                   <h6>Chart Pie</h6>
+                                   <p>Genre Paling Banayak</p>
+                              </div>
+                         </div>
+                    </div>
+                    <div class="row">
+                         <div class="col-md-6">
+                              <div class="ct-chart ct-chart4 ct-golden-section" id="chart1"></div>
+                         </div>
+                         <div class="col-md-6">
+                              <div id="chart4"></div>
+                         </div>
+                    </div>
+                    
                </div>
           </section>
 
@@ -919,6 +993,7 @@
                });
           </script>
 
+          //scraping1
           <script type="text/javascript">
                $(function () {
                     $.get('headline.json', function (obj) {
@@ -941,6 +1016,7 @@
                });
           </script>
 
+          //scraping2
           <script type="text/javascript">
                $(function () {
                     $.get('hasilscraping.json', function (obj) {
@@ -963,6 +1039,234 @@
                          $('#data_scrapping2').html(str2);
                     });
                });                                             
+          </script>
+
+          // chart
+          <script type="text/javascript">
+
+          //line
+          $(function () {
+                    $.get('hasilscraping.json', function (obj) {
+                         var rating = [];
+                         var rankName = [];
+                    
+                         $.each(obj, function (n, data) {
+                              rating.push(data.Rating);
+                              rankName.push(data.Judul);
+                         });
+
+                         while (rating.length > 10) {
+                              rating.pop();
+                         }
+
+                         while (rankName.length > 10) {
+                              rankName.pop();
+                         }
+
+                         rating.reverse();
+
+                         new Chartist.Line(
+                              '.ct-chart1',
+                              {
+                                   labels: rankName,
+                                   series: [rating],
+                              },
+                              {
+                                   low: 0,
+                                   showArea: true,
+                              }
+                         );
+                    });
+               });
+
+          // bar vertical
+          $(function () {
+                    $.get('hasilscraping.json', function (obj) {
+                         var durasi = [[], []];
+                         $.each(obj, function (n, data) {
+                              durasi[0].push(data.Durasi.split(' ')[0]);
+                              durasi[1].push(data.Judul);
+                         });
+
+                         // durasi[1].sort();
+                         durasi[0].sort();
+
+                         while (durasi[0].length > 10) {
+                              durasi[0].pop();
+                         }
+
+                         while (durasi[1].length > 10) {
+                              durasi[1].pop();
+                         }
+                         new Chartist.Bar(
+                              '.ct-chart2',
+                              {
+                                   labels: durasi[1],
+                                   series: durasi[0],
+                              },
+                              {
+                                   distributeSeries: true,
+                              }
+                         );
+                    });
+               });
+
+          // bar horizontal
+          $(function () {
+               $.get('hasilscraping.json', function (obj) {
+                    var ranking = [[], []];
+                    $.each(obj, function (n, data) {
+                         ranking[0].push(data.Rank);
+                         ranking[1].push(data.Judul);
+                    });
+
+                    while (ranking[0].length > 10) {
+                         ranking[0].pop();
+                    }
+
+                    while (ranking[1].length > 10) {
+                         ranking[1].pop();
+                    }
+
+                    new Chartist.Bar(
+                         '.ct-chart3',
+                         {
+                              labels: ranking[1],
+                              series: [ranking[0]],
+                         },
+                         {
+                              seriesBarDistance: 10,
+                              reverseData: true,
+                              horizontalBars: true,
+                              axisY: {
+                                   offset: 70,
+                              },
+                         }
+                    );
+               });
+               });
+          // pie
+          $(function () {
+                    var str2 = '<table>';
+                    var action = 0,
+                         adventure = 0,
+                         animation = 0,
+                         biography = 0,
+                         crime = 0,
+                         comedy = 0,
+                         fantasy = 0,
+                         mystery = 0,
+                         sci = 0,
+                         sport = 0,
+                         romance = 0,
+                         thriller = 0,
+                         war = 0;
+
+                    $.get('hasilscraping.json', function (obj) {
+                         str2 = '<table class="table"><thead class="thead-dark"><tr><th scope="col">Genre</th></thead><tbody>';
+
+                         $.each(obj, function (n, data) {
+                              for (let index = 0; index < data.Genre.split(', ').length; index++) {
+                                   switch (data.Genre.split(', ')[index]) {
+                                        case 'Action':
+                                             action++;
+                                             break;
+
+                                        case 'Adventure':
+                                             adventure++;
+                                             break;
+
+                                        case 'Animation':
+                                             animation++;
+                                             break;
+
+                                        case 'Biography':
+                                             biography++;
+                                             break;
+
+                                        case 'Crime':
+                                             crime++;
+                                             break;
+
+                                        case 'Comedy':
+                                             comedy++;
+                                             break;
+
+                                        case 'Fantasy':
+                                             fantasy++;
+                                             break;
+
+                                        case 'Mystery':
+                                             mystery++;
+                                             break;
+
+                                        case 'Sci-Fi':
+                                             sci++;
+                                             break;
+
+                                        case 'Sport':
+                                             sport++;
+                                             break;
+
+                                        case 'Romance':
+                                             romance++;
+                                             break;
+
+                                        case 'Thriller':
+                                             thriller++;
+                                             break;
+
+                                        case 'War':
+                                             war++;
+                                             break;
+
+                                        default:
+                                             break;
+                                   }
+                              }
+                         });
+
+                         str2 += '<tr><td> Action = ' + action + '</td>';
+                         str2 += '<tr><td> Adventure = ' + adventure + '</td>';
+                         str2 += '<tr><td> Animation = ' + animation + '</td>';
+                         str2 += '<tr><td> Biography = ' + biography + '</td>';
+                         str2 += '<tr><td> Crime = ' + crime + '</td>';
+                         str2 += '<tr><td> Comedy = ' + comedy + '</td>';
+                         str2 += '<tr><td> Fantasy = ' + fantasy + '</td>';
+                         str2 += '<tr><td> Mystery = ' + mystery + '</td>';
+                         str2 += '<tr><td> Sci-Fi = ' + sci + '</td>';
+                         str2 += '<tr><td> Sport = ' + sport + '</td>';
+                         str2 += '<tr><td> Romance = ' + romance + '</td>';
+                         str2 += '<tr><td> Thriller = ' + thriller + '</td>';
+                         str2 += '<tr><td> War = ' + war + '</td>';
+
+                         str2 += '</tbody></table>';
+
+                         $('#chart4').html(str2);
+
+                         //sorting variabel
+                         var genre = [action, adventure, animation, biography, crime, comedy, fantasy, mystery, sci, sport, romance, thriller, war];
+                         genre.sort();
+                         genre.pop();
+                         genre.pop();
+                         genre.pop();
+
+                         //chart
+                         var data = {
+                              series: genre,
+                         };
+
+                         var sum = function (a, b) {
+                              return a + b;
+                         };
+
+                         new Chartist.Pie('.ct-chart4', data, {
+                              labelInterpolationFnc: function (value) {
+                                   return Math.round((value / data.series.reduce(sum)) * 100) + '%';
+                              },
+                         });
+                    });
+               });
           </script>
      </body>
 </html>
