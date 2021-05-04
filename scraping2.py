@@ -15,7 +15,7 @@ i = 1
 now = datetime.now()
 waktu = now.strftime("%d %B %Y %H:%M:%S")
 
-while i <= 100:   
+while i <= 150:   
     for parrent in driver.find_elements_by_class_name("mode-advanced"):
         print(parrent.text.split("\n"))
         for img in parrent.find_elements_by_tag_name("img"):
@@ -28,6 +28,7 @@ while i <= 100:
             "Link_judul": parrent.find_element_by_tag_name("a").get_attribute("href"),
             "Durasi": parrent.text.split("\n")[1].split(" | ")[1],
             "Rating": parrent.text.split("\n")[2].split(" ")[0],
+            "Genre": parrent.find_element_by_class_name("genre").text,
             "Direktor": parrent.text.split("\n")[5].split(": ")[1].split(" | ")[0],
             "Image": img.get_attribute("src"),
             "Waktu_scrapping":waktu
